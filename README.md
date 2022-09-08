@@ -117,27 +117,27 @@ Since the adpated model shares the same latent space with the original IDE3D mod
 
 ### Render images
 ```
-python gen_images.py \
-        --network /path/to/apdated_ide3d.pkl \
-        --seeds 58,96,174,180,179,185 \
-        --trunc 0.7 \
+python gen_images.py
+        --network /path/to/apdated_ide3d.pkl
+        --seeds 58,96,174,180,179,185 
+        --trunc 0.7 
         --outdir out
 ```
 
 ### Render videos
 ```
-python gen_videos.py \
-    --network /path/to/apdated_ide3d.pkl \
-    --seeds 58,96,174,180,179,185 \
-    --grid 3x2 \
-    --trunc 0.7 \
-    --outdir out \
+python gen_videos.py 
+    --network /path/to/apdated_ide3d.pkl 
+    --seeds 58,96,174,180,179,185 
+    --grid 3x2 
+    --trunc 0.7 
+    --outdir out 
     --image_mode image_seg 
 ```
     
 ## Citation
 
-If you make use of our work, please cite the following paper:
+If you make use of our work, please cite the following papers:
 
 ```
 @article{sun2022ide,
