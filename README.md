@@ -24,7 +24,7 @@ The following diagram illustrates the process:
 
 ## Generator Domain Adaptation
 
-Here are a samples:
+Here is a sample:
 
 <p float="centered">
   <img src="img/example.png" width=100% />
@@ -106,7 +106,7 @@ If you find the UI useful and want it expended to allow easier access to saved m
 
 ## 3D-Aware face editing
 
-Since the adpated model shares the same latent space with the original IDE3D model, it supports 3D-Aware face editing. You can replace the original model path to the apdated one and run the ui following (instructions)[https://github.com/MrTornado24/IDE-3D]. Here is a sample:
+Since the adpated model shares the same latent space with the original IDE3D model, it supports 3D-Aware face editing. You can replace the original model path to the apdated one and run the ui following [instructions](https://github.com/MrTornado24/IDE-3D). Here is a sample:
 
 
 <p float="centered">
