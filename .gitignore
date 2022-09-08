@@ -1,3 +1,4 @@
 .vscode
 training-runs
 *.pyc
+out/
