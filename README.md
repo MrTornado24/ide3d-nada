@@ -15,33 +15,16 @@ We show that through natural language prompts and a few minutes of training, our
 We conduct an extensive set of experiments and comparisons across a wide range of domains. These demonstrate the effectiveness of our approach and show that our shifted models maintain the latent-space properties that make generative models appealing for downstream tasks.
 
 ## Description
-This repo contains the official implementation of StyleGAN-NADA, a Non-Adversarial Domain Adaptation for image generators.
-At a high level, our method works using two paired generators. We initialize both using a pre-trained model (for example, FFHQ). We hold one generator constant and train the other by demanding that the direction between their generated images in clip space aligns with some given textual direction.
+This repo contains the implementation of IDE3D-NADA, a Non-Adversarial Domain Adaptation for [IDE-3D](https://mrtornado24.github.io/IDE-3D/). You can find the official code of StyleGAN-NADA [here](https://github.com/rinongal/StyleGAN-nada).
 
 The following diagram illustrates the process:
 
 ![](img/arch.png)
 
-We set up a colab notebook so you can play with it yourself :) Let us know if you come up with any cool results!
-
-We've also included inversion in the notebook (using [ReStyle](https://github.com/yuval-alaluf/restyle-encoder)) so you can use the paired generators to edit real images.
-Most edits will work well with the [pSp](https://github.com/eladrich/pixel2style2pixel) version of ReStyle, which also allows for more accurate reconstructions.
-In some cases, you may need to switch to the [e4e](https://github.com/omertov/encoder4editing) based encoder for better editing at the cost of reconstruction accuracy.
-
-## Updates
-**18/05/2022 (A)** Added [HuggingFace Spaces demo](https://huggingface.co/spaces/rinong/StyleGAN-NADA)  <br>
-**18/05/2022 (B)** Added (partial) StyleGAN-XL support <br>
-**03/10/2021 (A)** Interpolation video script now supports InterfaceGAN based-editing. <br>
-**03/10/2021 (B)** Updated the notebook with support for target style images. <br>
-**03/10/2021 (C)** Added [replicate.ai](https://replicate.ai/rinongal/stylegan-nada) support. You can now run inference or generate videos without needing to setup anything or work with code. <br>
-**22/08/2021** Added a script for generating cross-domain interpolation videos (similar to the top video in the project page). <br>
-**21/08/2021 (A)** Added the ability to mimic styles from an image set. See the usage section. <br>
-**21/08/2021 (B)** Added dockerized UI tool. <br>
-**21/08/2021 (C)** Added link to drive with pre-trained models.
 
 ## Generator Domain Adaptation
 
-We provide many examples of converted generators in our [project page](https://stylegan-nada.github.io/). Here are a few samples:
+Here are a few samples:
 
 <p float="centered">
   <img src="img/sketch_hq.jpg" width=98.5% />
