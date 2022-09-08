@@ -24,13 +24,10 @@ The following diagram illustrates the process:
 
 ## Generator Domain Adaptation
 
-Here are a few samples:
+Here are a samples:
 
 <p float="centered">
-  <img src="img/sketch_hq.jpg" width=98.5% />
-  <img src="img/mona_lisa.jpg" width=98.5% />
-  <img src="img/bears.jpg" width="49%" />
-  <img src="img/1920_car.jpg" width="49%" /> 
+  <img src="img/example.png" width=100% />
 </p>
 
 ## Setup
@@ -54,15 +51,15 @@ pip install git+https://github.com/openai/CLIP.git
 To convert a generator from one domain to another, use the colab notebook or run the training script in the ZSSGAN directory:
 
 ```
-python train.py --size 1024 
+python train.py --size 512
                 --batch 2 
                 --n_sample 4 
                 --output_dir /path/to/output/dir 
                 --lr 0.002 
-                --frozen_gen_ckpt /path/to/stylegan2-ffhq-config-f.pt 
+                --frozen_gen_ckpt /path/to/pretrained_ide3d.pkl 
                 --iter 301 
-                --source_class "photo" 
-                --target_class "sketch" 
+                --source_class "Photo" 
+                --target_class "3D Render in the Style of Pixar" 
                 --auto_layer_k 18
                 --auto_layer_iters 1 
                 --auto_layer_batch 8 
@@ -70,7 +67,8 @@ python train.py --size 1024
                 --clip_models "ViT-B/32" "ViT-B/16" 
                 --clip_model_weights 1.0 1.0 
                 --mixing 0.0
-                --save_interval 150
+                --save_interval 100
+                --ide3d
 ```
 
 Where you should adjust size to match the size of the pre-trained model, and the source_class and target_class descriptions control the direction of change.
@@ -83,19 +81,9 @@ For an explenation of each argument (and a few additional options), please consu
 ```
 where the directory should contain a few images (png, jpg or jpeg) with the style you want to mimic. There is no need to normalize or preprocess the images in any form.
 
-Some results of converting an FFHQ model using children's drawings, LSUN Cars using Dali paintings and LSUN Cat using abstract sketches:
-
-![](img/few_shot_samples.jpg)
-
-**18/05/2022**
-StyleGAN3 / StyleGAN-XL models can be trained by appending the `--sg3` or `--sgxl` flags to the training command. Please note that StyleGAN-3 based models (and XL among them) may display grid artifacts under fine-tuning, and that neither model currently supports layer freezing.
-
-See [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](http://colab.research.google.com/github/rinongal/stylegan-nada/blob/main/stylegan3_nada.ipynb) for an example of training with SG3.
-
 ## Pre-Trained Models
 
-We provide a [Google Drive](https://drive.google.com/drive/folders/1Z76nD8pXIL2O5f6xV8VjM4DUCmhbzn0l?usp=sharing) containing an assortment of models used in the paper, tweets and other locations.
-If you want access to a model not yet included in the drive, please let us know.
+We will add some pretrained models soon.
 
 ## Docker
 
@@ -116,43 +104,56 @@ docker-compose up
 
 If you find the UI useful and want it expended to allow easier access to saved models, support for real image editing etc., please let us know.
 
-## Editing Video
+## 3D-Aware face editing
 
-In order to generate a cross-domain editing video (such as the one at the top of our project page), prepare a set of edited latent codes in the original domain and run the following `generate_videos.py` script in the `ZSSGAN` directory:
+Since the adpated model shares the same latent space with the original IDE3D model, it supports 3D-Aware face editing. You can replace the original model path to the apdated one and run the ui following (instructions)[https://github.com/MrTornado24/IDE-3D]. Here is a sample:
 
+
+<p float="centered">
+  <img src="img/edit.png" width=100% />
+</p>
+
+## Render images and videos
+
+### Render images
 ```
-python generate_videos.py --ckpt /model_dir/pixar.pt             \
-                                 /model_dir/ukiyoe.pt            \
-                                 /model_dir/edvard_munch.pt      \
-                                 /model_dir/botero.pt            \
-                          --out_dir /output/video/               \
-                          --source_latent /latents/latent000.npy \
-                          --target_latents /latents/
+python gen_images.py
+        --network /path/to/apdated_ide3d.pkl
+        --seeds 58,96,174,180,179,185 
+        --trunc 0.7 
+        --outdir out
 ```
 
-* The script relies on ffmpeg to function. On linux it can be installed by running `sudo apt install ffmpeg`
-* The argument to `--ckpt` is a list of model checkpoints used to fill the grid. 
-  * The number of models must be a perfect square, e.g. 1, 4, 9...
-* The argument to `--target_latents` can be either a directory containing a set of `.npy` w-space latent codes, or a list of individual files.
-* Please see the script for more details.
-
-We provide [example latent codes](https://drive.google.com/file/d/1E4lkAKJhZlfLeKOtKrRcqN-Te-8IotYm/view?usp=sharing) for the same identity used in our video. If you want to generate your own, we recommend using [StyleCLIP](https://github.com/orpatashnik/StyleCLIP), [InterFaceGAN](https://github.com/genforce/interfacegan), [StyleFlow](https://github.com/RameenAbdal/StyleFlow), [GANSpace](https://github.com/harskish/ganspace) or any other latent space editing method.
-
-**03/10/2021** We now provide editing directions for use in video generation. To use the built-in directions, omit the ```--target_latents``` argument. You can use specific editing directions from the available list by passing them with the ```--edit_directions``` flag. See ```generate_videos.py``` for more information. <br>
-
-## Related Works
-
-The concept of using CLIP to guide StyleGAN generation results was introduced in [StyleCLIP](https://arxiv.org/abs/2103.17249) (Patashnik et al.).
-
-We invert real images into the GAN's latent space using [ReStyle](https://arxiv.org/abs/2104.02699) (Alaluf et al.).
-
-Editing directions for video generation were taken from [Anycost GAN](https://github.com/mit-han-lab/anycost-gan) (Lin et al.).
-
+### Render videos
+```
+python gen_videos.py 
+    --network /path/to/apdated_ide3d.pkl 
+    --seeds 58,96,174,180,179,185 
+    --grid 3x2 
+    --trunc 0.7 
+    --outdir out 
+    --image_mode image_seg 
+```
+    
 ## Citation
 
-If you make use of our work, please cite our paper:
+If you make use of our work, please cite the following papers:
 
 ```
+@article{sun2022ide,
+  title={IDE-3D: Interactive Disentangled Editing for High-Resolution 3D-aware Portrait Synthesis},
+  author={Sun, Jingxiang and Wang, Xuan and Shi, Yichun and Wang, Lizhen and Wang, Jue and Liu, Yebin},
+  journal={arXiv preprint arXiv:2205.15517},
+  year={2022}
+}
+
+@inproceedings{sun2021fenerf,
+  title={FENeRF: Face Editing in Neural Radiance Fields},
+  author={Sun, Jingxiang and Wang, Xuan and Zhang, Yong and Li, Xiaoyu and Zhang, Qi and Liu, Yebin and Wang, Jue},
+  booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year={2022}
+}
+
 @misc{gal2021stylegannada,
       title={StyleGAN-NADA: CLIP-Guided Domain Adaptation of Image Generators}, 
       author={Rinon Gal and Or Patashnik and Haggai Maron and Gal Chechik and Daniel Cohen-Or},
@@ -162,13 +163,3 @@ If you make use of our work, please cite our paper:
       primaryClass={cs.CV}
 }
 ```
-
-## Additional Examples
-
-Our method can be used to enable out-of-domain editing of real images, using pre-trained, off-the-shelf inversion networks. Here are a few more examples:
-
-![](img/celebs1.jpg)
-
-![](img/celebs2.jpg)
-
-![](img/dogs.jpg)
