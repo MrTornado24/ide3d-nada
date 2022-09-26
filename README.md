@@ -141,10 +141,16 @@ If you make use of our work, please cite the following papers:
 
 ```
 @article{sun2022ide,
-  title={IDE-3D: Interactive Disentangled Editing for High-Resolution 3D-aware Portrait Synthesis},
-  author={Sun, Jingxiang and Wang, Xuan and Shi, Yichun and Wang, Lizhen and Wang, Jue and Liu, Yebin},
-  journal={arXiv preprint arXiv:2205.15517},
-  year={2022}
+ title = {IDE-3D: Interactive Disentangled Editing for High-Resolution 3D-aware Portrait Synthesis},
+ author = {Sun, Jingxiang and Wang, Xuan and Shi, Yichun and Wang, Lizhen and Wang, Jue and Liu, Yebin},
+ journal = {ACM Transactions on Graphics (TOG)},
+ volume = {41},
+ number = {6},
+ articleno = {270},
+ pages = {1--10},
+ year = {2022},
+ publisher = {ACM New York, NY, USA},
+ doi={10.1145/3550454.3555506},
 }
 
 @inproceedings{sun2021fenerf,
